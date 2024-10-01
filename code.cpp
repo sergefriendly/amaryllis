@@ -176,35 +176,35 @@ private:
 
 public:
     static void yahoo() {
-    	std::string filename = "/home/me/_/homes/eclipse-cpp-2024-06-22-workspace/ASCONA/src/points.txt";
-		  std::ifstream file(filename);
-		  std::string line;
+    	std::string filename = "../src/points.txt";
+	std::ifstream file(filename);
+	std::string line;
 
-  		if (file.is_open()) {
-  			std::vector<Point> points1, points2;
-  			while (std::getline(file, line)) {
-  				std::size_t semicolonPos = line.find(';');
-  				if (semicolonPos != std::string::npos) {
-  					std::string points1Str = line.substr(0, semicolonPos);
-  					std::string points2Str = line.substr(semicolonPos + 1);
-  
-  					parsePoints(points1Str, points1);
-  					parsePoints(points2Str, points2);
-  				}
-  			}
-  
-  			// For demonstration: print the points from both vectors
-  			for (const auto& point : points1) {
-  				std::cout << "Point1: " << point.t << " " << point.x << " " << point.y << std::endl;
-  			}
-  			for (const auto& point : points2) {
-  				std::cout << "Point2: " << point.t << " " << point.x << " " << point.y << std::endl;
-  			}
-  
-  			file.close();
-  		} else {
-  			std::cerr << "Unable to open file" << std::endl;
-  		}
+	if (file.is_open()) {
+		std::vector<Point> points1, points2;
+		while (std::getline(file, line)) {
+			std::size_t semicolonPos = line.find(';');
+			if (semicolonPos != std::string::npos) {
+				std::string points1Str = line.substr(0, semicolonPos);
+				std::string points2Str = line.substr(semicolonPos + 1);
+	
+				parsePoints(points1Str, points1);
+				parsePoints(points2Str, points2);
+			}
+		}
+
+		// For demonstration: print the points from both vectors
+		for (const auto& point : points1) {
+			std::cout << "Point1: " << point.t << " " << point.x << " " << point.y << std::endl;
+		}
+		for (const auto& point : points2) {
+			std::cout << "Point2: " << point.t << " " << point.x << " " << point.y << std::endl;
+		}
+
+		file.close();
+	} else {
+		std::cerr << "Unable to open file" << std::endl;
+	}
     }
 };
 
