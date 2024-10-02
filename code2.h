@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 
+namespace spline {
 
 struct Point {
 	double t, x, y;
@@ -64,6 +65,8 @@ public:
 
 		return x;
 	}
+
+	Curve() {} // !!!
 
 	Curve(const std::vector<Point>& _points) {
 		if (_points.size() < 2) {
@@ -176,7 +179,60 @@ public:
 		}
 		return min_distance;
 	}
+
+	static std::vector<Point> parsePoints(const std::string& line) {
+	    std::vector<Point> points;
+	    std::istringstream stream(line);
+	    double x, y;
+	    char separator;
+	    double t = 0.0; // Initial value of t as per your requirement
+
+	    while (stream >> x >> y) {
+	        points.push_back(Point{t, x, y});
+	        t += 1.0;
+	        stream >> separator; // To read and discard the comma or semicolon
+	    }
+
+	    return points;
+	}
+
+	static int fill_vectors_from_file(std::string file_name) {
+		std::ifstream file(file_name);
+		if (!file.is_open()) {
+			std::cerr << "Error opening file" << std::endl;
+			return 1;
+		}
+
+		std::string line;
+		std::vector<Point> set1, set2;
+		bool isFirstSet = true;
+
+		while (getline(file, line, ';')) {
+			if (isFirstSet) {
+				set1 = parsePoints(line);
+				isFirstSet = false;
+			} else {
+				set2 = parsePoints(line);
+			}
+		}
+
+		file.close();
+
+		// For demonstration: print the points
+		std::cout << "Set 1:" << std::endl;
+		for (const auto& point : set1) {
+			std::cout << "t: " << point.t << ", x: " << point.x << ", y: " << point.y << std::endl;
+		}
+
+		std::cout << "Set 2:" << std::endl;
+		for (const auto& point : set2) {
+			std::cout << "t: " << point.t << ", x: " << point.x << ", y: " << point.y << std::endl;
+		}
+
+		return 0;
+	}
 };
 
+}
 
 #endif /* SPLINES_H_ */
