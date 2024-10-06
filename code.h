@@ -475,7 +475,7 @@ int __main__(int argc, char *argv[]) {
 	char* end;
 	Curve::accuracy_tolerance = std::strtod(argv[2], &end);
 	if (*end != '\0') {
-		std::cerr << "Invalid number: " << argv[2] << std::endl;
+		std::cerr << "Недопустимое число: " << argv[2] << std::endl;
 		return 1;
 	}
 
