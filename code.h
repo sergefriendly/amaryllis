@@ -488,12 +488,14 @@ int __main__(int argc, char *argv[]) {
 
 
 	std::cout << std::fixed;
-	std::cout << std::setprecision(9);
+	std::cout << std::setprecision(9); // необходим для указания количества показываемых знаков после запятой для числа
 
-	std::vector<Point> points1, points2;
-	Point::fillVectorsFromTextFile(argv[1],
-			points1, points2, true);
+	std::vector<Point> points1, points2; // определяем два набора векторов точек, т.к. производим операции над двумя кривыми
+	Point::fillVectorsFromTextFile(argv[1], points1, points2, true); // Имя файла передаётся как параметр командной строки через argv[1]
 
+	/*
+	 * Считываем второй параметр командной строки, в который передаётся точность
+	 */
 	char* end;
 	Curve::accuracy_tolerance = std::strtod(argv[2], &end);
 	if (*end != '\0') {
@@ -501,11 +503,18 @@ int __main__(int argc, char *argv[]) {
 		return 1;
 	}
 
+	/*
+	 * Создаём две кривые на базе считанных координат точек, используя фабричный метод,
+  	 * который создаёт объект динамически.
+	 */
 	auto curve1 = CurveFactory::createCurve(CurveFactory::CUBIC_SPLINE);
 	auto curve2 = CurveFactory::createCurve(CurveFactory::CUBIC_SPLINE);
 	curve1->buildOn(points1);
 	curve2->buildOn(points2);
 
+	/*
+	 * Для примера проводится интерполирование для первой и второй кривой значений, взятых из их областей определния
+	 */
 	std::cout << "val |-> interp" << std::endl;
 	double val1 = 1.5;
 	double interp1 = curve1->interpYbyX(val1);
@@ -515,7 +524,7 @@ int __main__(int argc, char *argv[]) {
 	double interp2 = curve2->interpYbyX(val2);
 	std::cout << val2 << " |-> " << interp2 << std::endl;
 
-
+	// Затем, вычислям прересечения
 	std::vector<Point> interpPoints = Curve::findIntersections(curve1, curve2);
 	std::cout << "Пересечения: " << std::endl;
 	for (const auto& p : interpPoints) {
@@ -524,6 +533,8 @@ int __main__(int argc, char *argv[]) {
 	if (interpPoints.empty()) {
 		std::cout << "Пересечений нет." << std::endl;
 	}
+
+	// И затем, находим минимальную дистанцию между кривыми.
 	double min_dist = Curve::findMinimalDistance(curve1, curve2);
 	std::cout << "Минимальная дистанция: " << min_dist << std::endl;
 	return 0;
