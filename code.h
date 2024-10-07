@@ -213,11 +213,21 @@ public:
 
 	static std::vector<Point> findIntersections(const Curve * const curve1,
 			const Curve * const curve2, double epsilon = accuracy_tolerance) {
+		/*
+  		 * В этот вектор будем собирать точки пересечения с заданной точностью epsilon
+     		 */
 		std::vector<Point> intersections;
-		double t_min = std::max(curve1->points.front().t,
-				curve2->points.front().t);
-		double t_max = std::min(curve1->points.back().t, curve2->points.back().t);
 
+		/*
+  		 * Вычисляем область для последующего поиска общих точек пересечения
+     		 */
+		double t_min = std::max(curve1->points.front().t, curve2->points.front().t);
+		double t_max = std::min(curve1->points.back().t,  curve2->points.back().t);
+
+		/*
+  		 * Интерполируем необходимые занчения, пробегая повсем точкам области, находя при этом
+     		 * абсолютные занчения, по которым в всою очередь и определяется является ли пара точкой пересечения или нет.
+     		 */
 		for (double t = t_min; t <= t_max; t += epsilon) {
 			double x1 = curve1->interpXbyT(t);
 			double y1 = curve1->interpYbyX(x1);
