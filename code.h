@@ -442,7 +442,7 @@ public:
 		double t0 = points[i].t;
 		double t1 = points[i + 1].t;
 
-		// Linear interpolation for y
+		// Линейная интерполяция для Y
 		return y0 + (y1 - y0) * (t - t0) / (t1 - t0);
 	}
 
